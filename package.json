@@ -1,7 +1,7 @@
 {
   "name": "lusca",
   "version": "1.0.0",
-  "description": "Application security for express.",
+  "description": "Application security for express and koa.",
   "main": "index",
   "scripts": {
     "test": "npm run test-express && npm run test-koa",
