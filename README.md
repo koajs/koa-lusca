@@ -1,10 +1,11 @@
-# lusca
+# koa-lusca
 
 [![Build Status](https://travis-ci.org/koajs/koa-lusca.svg?branch=master)](https://travis-ci.org/koajs/koa-lusca)
 [![NPM version](https://badge.fury.io/js/koa-lusca.svg)](http://badge.fury.io/js/koa-lusca)
 
 Web application security middleware. Support express and koa.
 
+Fork from [lusca](https://github.com/krakenjs/lusca), [krakenjs/lusca#26](https://github.com/krakenjs/lusca/pull/26).
 
 ## Usage
 
