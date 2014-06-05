@@ -37,10 +37,11 @@ var lusca = module.exports = function (options) {
                         // { csrf: true }
                         // { xssProtection: true }
                         config = {};
-                    } else if ((key === 'xframe' || key === 'p3p') &&
+                    } else if ((key === 'xframe' || key === 'p3p' || key === 'cto') &&
                         typeof config === 'string') {
                         // { xframe: 'DENY' }
                         // { p3p: 'MY_P3P_VALUE' }
+                        // { cto: 'nosniff' }
                         config = {
                             value: config
                         };
@@ -85,3 +86,4 @@ lusca.hsts = require('./lib/hsts');
 lusca.p3p = require('./lib/p3p');
 lusca.xframe = require('./lib/xframes');
 lusca.xssProtection = require('./lib/xssprotection');
+lusca.cto = require('./lib/cto');
