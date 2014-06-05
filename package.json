@@ -30,13 +30,15 @@
     "node": ">=0.11.x"
   },
   "engineStrict": true,
+  "dependencies": {
+    "koa-compose": "~2.3.0"
+  },
   "devDependencies": {
     "jshint": "*",
     "supertest": "~0.13.0",
     "express": "~3.4.8",
     "koa": "~0.6.1",
     "koa-middlewares": "~0.1.3",
-    "koa-compose": "~2.3.0",
     "grunt-cli": "~0.1.13",
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.10.0",
