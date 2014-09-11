@@ -1,7 +1,27 @@
 # koa-lusca
 
-[![Build Status](https://travis-ci.org/koajs/koa-lusca.svg?branch=master)](https://travis-ci.org/koajs/koa-lusca)
-[![NPM version](https://badge.fury.io/js/koa-lusca.svg)](http://badge.fury.io/js/koa-lusca)
+[![NPM version][npm-image]][npm-url]
+[![build status][travis-image]][travis-url]
+[![Test coverage][coveralls-image]][coveralls-url]
+[![Gittip][gittip-image]][gittip-url]
+[![David deps][david-image]][david-url]
+[![node version][node-image]][node-url]
+[![npm download][download-image]][download-url]
+
+[npm-image]: https://img.shields.io/npm/v/koa-lusca.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/koa-lusca
+[travis-image]: https://img.shields.io/travis/koajs/koa-lusca.svg?style=flat-square
+[travis-url]: https://travis-ci.org/koajs/koa-lusca
+[coveralls-image]: https://img.shields.io/coveralls/koajs/koa-lusca.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/koajs/koa-lusca?branch=master
+[gittip-image]: https://img.shields.io/gittip/fengmk2.svg?style=flat-square
+[gittip-url]: https://www.gittip.com/fengmk2/
+[david-image]: https://img.shields.io/david/koajs/koa-lusca.svg?style=flat-square
+[david-url]: https://david-dm.org/koajs/koa-lusca
+[node-image]: https://img.shields.io/badge/node.js-%3E=_0.11-green.svg?style=flat-square
+[node-url]: http://nodejs.org/download/
+[download-image]: https://img.shields.io/npm/dm/koa-lusca.svg?style=flat-square
+[download-url]: https://npmjs.org/package/koa-lusca
 
 Web application security middleware. Support express and koa.
 
