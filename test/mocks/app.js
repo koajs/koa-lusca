@@ -2,7 +2,12 @@
 
 
 var express = require('express'),
-    lusca = require('../..');
+	cookieParser = require('cookie-parser'),
+	cookieSession = require('cookie-session'),
+	session = require('express-session'),
+	bodyParser = require('body-parser'),
+	errorHandler = require('errorhandler'),
+	lusca = require('../..');
 
 function createKoa(config) {
     var http = require('http'),
@@ -39,19 +44,32 @@ function createKoa(config) {
     return server;
 }
 
-module.exports = function (config) {
+module.exports = function (config, sessionType) {
     if (process.env.APP_MODE === 'koa') {
         return createKoa(config);
     }
 
     var app = express();
 
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: 'abc' }));
-    app.use(express.json());
-    app.use(express.urlencoded());
-    app.use(lusca(config));
-    app.use(express.errorHandler());
+	app.use(cookieParser());
+	if (sessionType === undefined || sessionType === 'session') {
+		app.use(session({
+			secret: 'abc',
+			resave: true,
+			saveUninitialized: true
+		}));
+	} else if (sessionType === "cookie") {
+		app.use(cookieSession({
+			secret: 'abc'
+		}));
+	}
 
-    return app;
+	app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({
+		extended: false
+	}));
+	(config !== undefined) ? app.use(lusca(config)) : console.log('no lusca');
+	app.use(errorHandler());
+
+	return app;
 };

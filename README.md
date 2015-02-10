@@ -33,8 +33,16 @@ Fork from [lusca](https://github.com/krakenjs/lusca), [krakenjs/lusca#26](https:
 
 ```js
 var express = require('express'),
-    app = express(),
-    lusca = require('lusca');
+	app = express(),
+	session = require('express-session'),
+	lusca = require('lusca');
+
+//this or other session management will be required
+app.use(session({
+	secret: 'abc',
+	resave: true,
+	saveUninitialized: true
+}));
 
 app.use(lusca({
     csrf: true,
@@ -53,9 +61,11 @@ app.use(lusca.csrf());
 app.use(lusca.csp({ /* ... */}));
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.p3p('ABCDEF'));
-app.use(lusca.hsts({ maxAge: 31536000 });
-app.use(lusca.xssProtection(true);
+app.use(lusca.hsts({ maxAge: 31536000 }));
+app.use(lusca.xssProtection(true));
 ```
+
+__Please note that you must use [express-session](https://github.com/expressjs/session), [cookie-session](https://github.com/expressjs/cookie-session), their express 3.x alternatives, or other session object management in order to use lusca.__
 
 ### For koa
 
@@ -87,13 +97,13 @@ app.use(lusca.hsts({ koa: true, maxAge: 31536000 });
 app.use(lusca.xssProtection({ koa: true });
 ```
 
-
 ## API
 
 
 ### lusca.csrf(options)
 
 * `key` String - Optional. The name of the CSRF token added to the model. Defaults to `_csrf`.
+* `secret` String - Optional. The key to place on the session object which maps to the server side token. Defaults to `_csrfSecret`.
 * `impl` Function - Optional. Custom implementation to generate a token.
 
 Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.
@@ -109,7 +119,19 @@ If enabled, the CSRF token must be in the payload when modifying data or you wil
 
 Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Security_Policy) (CSP) headers.
 
+#### Example Options
 
+```js
+// Everything but images can only come from own domain (excluding subdomains)
+{
+  policy: {
+    'default-src': '\'self\'',
+    'img-src': '*'
+  }
+}
+```
+
+See the [MDN CSP usage](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Using_Content_Security_Policy) page for more information on available policy options.
 
 ### lusca.xframe(value)
 
