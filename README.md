@@ -23,26 +23,24 @@
 [download-image]: https://img.shields.io/npm/dm/koa-lusca.svg?style=flat-square
 [download-url]: https://npmjs.org/package/koa-lusca
 
-Web application security middleware. Support express and koa.
+Web application security middleware for koa.
 
 Fork from [lusca](https://github.com/krakenjs/lusca), [krakenjs/lusca#26](https://github.com/krakenjs/lusca/pull/26).
 
 ## Usage
 
-### For express
-
 ```js
-var express = require('express'),
-    app = express(),
-    lusca = require('lusca');
+var koa = require('koa');
+var lusca = require('lusca');
+var app = koa();
 
 app.use(lusca({
-    csrf: true,
-    csp: { /* ... */},
-    xframe: 'SAMEORIGIN',
-    p3p: 'ABCDEF',
-    hsts: { maxAge: 31536000, includeSubDomains: true },
-    xssProtection: true
+  csrf: true,
+  csp: { /* ... */},
+  xframe: 'SAMEORIGIN',
+  p3p: 'ABCDEF',
+  hsts: { maxAge: 31536000, includeSubDomains: true },
+  xssProtection: true
 }));
 ```
 
@@ -50,56 +48,24 @@ Setting any value to `false` will disable it. Alternately, you can opt into meth
 
 ```js
 app.use(lusca.csrf());
-app.use(lusca.csp({ /* ... */}));
-app.use(lusca.xframe('SAMEORIGIN'));
-app.use(lusca.p3p('ABCDEF'));
+app.use(lusca.csp({/* ... */}));
+app.use(lusca.xframe({ value: 'SAMEORIGIN' }));
+app.use(lusca.p3p({ value: 'ABCDEF' }));
 app.use(lusca.hsts({ maxAge: 31536000 });
-app.use(lusca.xssProtection(true);
+app.use(lusca.xssProtection();
 ```
-
-### For koa
-
-```js
-var koa = require('koa'),
-    app = koa(),
-    lusca = require('lusca');
-
-app.use(lusca({
-    koa: true, // make sure use koa style middleware
-
-    csrf: true,
-    csp: { /* ... */},
-    xframe: 'SAMEORIGIN',
-    p3p: 'ABCDEF',
-    hsts: { maxAge: 31536000, includeSubDomains: true },
-    xssProtection: true
-}));
-```
-
-Setting any value to `false` will disable it. Alternately, you can opt into methods one by one:
-
-```js
-app.use(lusca.csrf({ koa: true }));
-app.use(lusca.csp({ koa: true, /* ... */}));
-app.use(lusca.xframe({ koa: true, value: 'SAMEORIGIN' }));
-app.use(lusca.p3p({ koa: true, value: 'ABCDEF' }));
-app.use(lusca.hsts({ koa: true, maxAge: 31536000 });
-app.use(lusca.xssProtection({ koa: true });
-```
-
 
 ## API
-
 
 ### lusca.csrf(options)
 
 * `key` String - Optional. The name of the CSRF token added to the model. Defaults to `_csrf`.
+* `secret` String - Optional. The key to place on the session object which maps to the server side token. Defaults to `_csrfSecret`.
 * `impl` Function - Optional. Custom implementation to generate a token.
 
 Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.
 
 If enabled, the CSRF token must be in the payload when modifying data or you will receive a *403 Forbidden*. To send the token you'll need to echo back the `_csrf` value you received from the previous request.
-
 
 ### lusca.csp(options)
 
@@ -109,7 +75,19 @@ If enabled, the CSRF token must be in the payload when modifying data or you wil
 
 Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Security_Policy) (CSP) headers.
 
+#### Example Options
 
+```js
+// Everything but images can only come from own domain (excluding subdomains)
+{
+  policy: {
+    'default-src': '\'self\'',
+    'img-src': '*'
+  }
+}
+```
+
+See the [MDN CSP usage](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Using_Content_Security_Policy) page for more information on available policy options.
 
 ### lusca.xframe(value)
 
@@ -117,15 +95,11 @@ Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Securi
 
 Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://www.owasp.org/index.php/Clickjacking).
 
-
-
 ### lusca.p3p(value)
 
 * `value` String - Required. The compact privacy policy.
 
 Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/kb/290333) (P3P) headers.
-
-
 
 ### lusca.hsts(options)
 
@@ -134,11 +108,14 @@ Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/
 
 Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain.
 
-
-
 ### lusca.xssProtection(options)
 
 * `options.enabled` Boolean - Optional. If the header is enabled or not (see header docs). Defaults to `1`.
 * `options.mode` String - Optional. Mode to set on the header (see header docs). Defaults to `block`.
 
 Enables [X-XSS-Protection](http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx) headers to help prevent cross site scripting (XSS) attacks in older IE browsers (IE8)
+
+## License
+
+- Original License: Apache License, Version 2.0, Copyright (C) 2014 eBay Software Foundation
+- Now: [MIT](LICENSE.txt)

@@ -1,16 +1,14 @@
 'use strict';
 
-
 var tokenModule = module.exports = {
+  value: 'tokenAllTheThings',
 
-    value: 'tokenAllTheThings',
+  create: function (ctx) {
+    ctx.session._token = 'mock token';
+    return tokenModule.value;
+  },
 
-    create: function (req) {
-        return tokenModule.value;
-    },
-
-    validate: function (req, token) {
-        return token === tokenModule.value;
-    }
-
+  validate: function (ctx, token) {
+    return token === tokenModule.value;
+  }
 };

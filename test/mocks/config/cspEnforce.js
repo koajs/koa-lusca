@@ -1,6 +1,5 @@
 'use strict';
 
-
 module.exports = {
 	reportOnly: false,
 	policy: {
