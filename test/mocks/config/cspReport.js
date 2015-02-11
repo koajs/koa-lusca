@@ -1,6 +1,5 @@
 'use strict';
 
-
 module.exports = {
 	reportOnly: true,
 	reportUri: 'http://www.example.com',

@@ -1,3 +1,13 @@
+/**!
+ * koa-lusca - lib/csp.js
+ *
+ * Copyright(c) 2014 - 2015 fengmk2 and other contributors.
+ * MIT Licensed
+ *
+ * Authors:
+ *   fengmk2 <fengmk2@gmail.com> (http://fengmk2.github.com)
+ */
+
 /*───────────────────────────────────────────────────────────────────────────*\
 │  Copyright (C) 2014 eBay Software Foundation                                │
 │                                                                             │
@@ -15,70 +25,29 @@
 │   See the License for the specific language governing permissions and       │
 │   limitations under the License.                                            │
 \*───────────────────────────────────────────────────────────────────────────*/
-'use strict';
 
+'use strict';
 
 /**
  * Outputs all security headers based on configuration
  * @param {Object} options The configuration object.
  */
 var lusca = module.exports = function (options) {
-    var headers = [];
-    var koa;
-    if (options) {
-        koa = !!options.koa;
-        Object.keys(lusca).forEach(function (key) {
-            var config = options[key];
+  var headers = [];
+  if (options) {
+    Object.keys(lusca).forEach(function (key) {
+      var config = options[key];
+      if (config) {
+        headers.push(lusca[key](config));
+      }
+    });
+  }
 
-            if (config) {
-                if (koa) {
-                    if ((key === 'csrf' || key === 'xssProtection') &&
-                        config === true) {
-                        // { csrf: true }
-                        // { xssProtection: true }
-                        config = {};
-                    } else if ((key === 'xframe' || key === 'p3p' || key === 'cto') &&
-                        typeof config === 'string') {
-                        // { xframe: 'DENY' }
-                        // { p3p: 'MY_P3P_VALUE' }
-                        // { cto: 'nosniff' }
-                        config = {
-                            value: config
-                        };
-                    }
-                    config.koa = koa;
-                }
-                headers.push(lusca[key](config));
-            }
-        });
-    }
-
-    if (koa) {
-        var compose = require('koa-compose');
-        var mw = compose(headers);
-        mw._name = 'lusca';
-        return mw;
-    }
-
-    return function lusca(req, res, next) {
-        var chain = next;
-
-        headers.forEach(function (header) {
-            chain = (function (next) {
-                return function (err) {
-                    if (err) {
-                        next(err);
-                        return;
-                    }
-                    header(req, res, next);
-                };
-            }(chain));
-        });
-
-        chain();
-    };
+  var compose = require('koa-compose');
+  var mw = compose(headers);
+  mw._name = 'lusca';
+  return mw;
 };
-
 
 lusca.csrf = require('./lib/csrf');
 lusca.csp = require('./lib/csp');

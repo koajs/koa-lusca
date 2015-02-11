@@ -1,46 +1,44 @@
 /*global describe:false, it:false */
 'use strict';
 
-
-var lusca = require('../index'),
-    request = require('supertest'),
-    assert = require('assert'),
-    mock = require('./mocks/app');
-
+var request = require('supertest');
+var assert = require('assert');
+var lusca = require('../index');
+var mock = require('./mocks/app');
 
 describe('CSP', function () {
+  it('method', function () {
+    assert(typeof lusca.csp === 'function');
+  });
 
-    it('method', function () {
-        assert(typeof lusca.csp === 'function');
+  it('header (report)', function (done) {
+    var config = require('./mocks/config/cspReport');
+    var app = mock({ csp: config });
+
+    app.get('/', function* () {
+      this.body = 'hello';
     });
 
+    request(app.listen())
+    .get('/')
+    .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.reportUri)
+    .expect('hello')
+    .expect(200, done);
+  });
 
-    it('header (report)', function (done) {
-        var config = require('./mocks/config/cspReport'),
-            app = mock({ csp: config });
 
-        app.get('/', function (req, res) {
-            res.status(200).end();
-        });
+  it('header (enforce)', function (done) {
+    var config = require('./mocks/config/cspEnforce');
+    var app = mock({ csp: config });
 
-        request(app)
-            .get('/')
-            .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.reportUri)
-            .expect(200, done);
+    app.get('/', function* () {
+      this.body = 'hello';
     });
 
-
-    it('header (enforce)', function (done) {
-        var config = require('./mocks/config/cspEnforce'),
-            app = mock({ csp: config });
-
-        app.get('/', function (req, res) {
-            res.status(200).end();
-        });
-
-        request(app)
-            .get('/')
-            .expect('Content-Security-Policy', 'default-src *; ')
-            .expect(200, done);
-    });
+    request(app.listen())
+    .get('/')
+    .expect('Content-Security-Policy', 'default-src *; ')
+    .expect('hello')
+    .expect(200, done);
+  });
 });
