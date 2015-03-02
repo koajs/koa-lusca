@@ -25,7 +25,7 @@ describe('CSRF', function () {
 
     app.get('/csrf', function* () {
       this.body = {
-        token: this.locals._csrf
+        token: this.state._csrf
       };
     });
 
@@ -44,13 +44,13 @@ describe('CSRF', function () {
 
     app.get('/csrf', function* () {
       this.body = {
-        token: this.locals._csrf
+        token: this.state._csrf
       };
     });
 
     app.post('/csrf', function* () {
       this.body = {
-        token: this.locals._csrf
+        token: this.state._csrf
       };
     });
 
@@ -85,7 +85,7 @@ describe('CSRF', function () {
 
     app.all('/csrf', function* () {
       this.body = {
-        token: this.locals.foobar
+        token: this.state.foobar
       };
     });
 
@@ -107,7 +107,7 @@ describe('CSRF', function () {
     var app = mock({ csrf: true });
     app.all('/csrf', function* () {
       this.body = {
-        token: this.locals._csrf
+        token: this.state._csrf
       };
     });
 
@@ -136,7 +136,7 @@ describe('CSRF', function () {
 
     app.all('/csrf', function* () {
       this.body = {
-        token: this.locals._csrf
+        token: this.state._csrf
       };
     });
 
@@ -166,7 +166,7 @@ describe('CSRF', function () {
 
     app.all('/csrf', function* () {
       this.body = {
-        token: this.locals._csrf
+        token: this.state._csrf
       };
     });
 
