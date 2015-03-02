@@ -1,8 +1,11 @@
 {
   "name": "koa-lusca",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Web application security middleware for koa.",
-  "main": "index",
+  "main": "index.js",
+  "files": [
+    "index.js", "lib/"
+  ],
   "scripts": {
     "test": "mocha --harmony -t 5000 test/*.js",
     "test-cov": "node --harmony node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -t 5000 test/*.js",
