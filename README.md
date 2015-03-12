@@ -28,7 +28,7 @@ Fork from [lusca](https://github.com/krakenjs/lusca), [krakenjs/lusca#26](https:
 
 ```js
 var koa = require('koa');
-var lusca = require('lusca');
+var lusca = require('koa-lusca');
 var app = koa();
 
 app.use(lusca({
