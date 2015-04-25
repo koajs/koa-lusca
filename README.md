@@ -103,7 +103,7 @@ Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/
 * `options.maxAge` Number - Required. Number of seconds HSTS is in effect.
 * `options.includeSubDomains` Boolean - Optional. Applies HSTS to all subdomains of the host
 
-Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain.
+Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain. The preload flag is required for HSTS domain submissions to [Chrome's HSTS preload list](https://hstspreload.appspot.com)
 
 ### lusca.xssProtection(options)
 
