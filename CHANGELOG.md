@@ -1,4 +1,9 @@
 
+2.1.0 / 2015-04-27
+==================
+
+ * Updated HSTS to support the preload flag (@gellerb)
+
 2.0.1 / 2015-03-02
 ==================
 
