@@ -84,6 +84,13 @@ Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Securi
 }
 ```
 
+```js
+// Block HTTP resources
+{
+  policy: ['block-all-mixed-content', 'upgrade-insecure-requests']
+}
+```
+
 See the [MDN CSP usage](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Using_Content_Security_Policy) page for more information on available policy options.
 
 ### lusca.xframe(value)
