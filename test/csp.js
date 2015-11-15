@@ -42,10 +42,10 @@ describe('CSP', function () {
     .expect(200, done);
   });
 
-  it('array block-all-mixed-content + upgrade insecure', function (done) {
+  it('string config', function (done) {
     var app = mock({
       csp: {
-        policy: ['block-all-mixed-content', 'upgrade-insecure-requests']
+        policy: 'default-src *a'
       }
     });
 
@@ -55,24 +55,44 @@ describe('CSP', function () {
 
     request(app.listen())
     .get('/')
-    .expect('Content-Security-Policy', 'block-all-mixed-content; upgrade-insecure-requests; ')
+    .expect('Content-Security-Policy', 'default-src *')
     .expect(200, done);
   });
 
-  it('harcoded block-all-mixed-conntent', function (done) {
+  it('array config', function (done) {
     var app = mock({
       csp: {
-        policy: 'block-all-mixed-content'
+        policy: ['default-src *', 'img-src *']
       }
     });
 
-    app.get('/', function (req, res) {
-      res.status(200).end();
+    app.get('/', function* () {
+      this.body = 'hello';
     });
 
     request(app.listen())
     .get('/')
-    .expect('Content-Security-Policy', 'block-all-mixed-content; ')
+    // .expect('Content-Security-Policy', 'block-all-mixed-content; upgrade-insecure-requests; ')
+    .expect('Content-Security-Policy', 'default-src *; img-src *')
+    .expect(200, done);
+  });
+
+  it('nested config', function (done) {
+    var app = mock({
+      csp: {
+        policy: [
+        { 'default-src': '*' },
+        'img-src *'
+        ]
+      }
+    });
+    app.get('/', function* () {
+      this.body = 'hello';
+    });
+
+    request(app.listen())
+    .get('/')
+    .expect('Content-Security-Policy', 'default-src *; img-src *')
     .expect(200, done);
   });
 });
