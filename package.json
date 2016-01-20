@@ -4,7 +4,8 @@
   "description": "Web application security middleware for koa.",
   "main": "index.js",
   "files": [
-    "index.js", "lib/"
+    "index.js",
+    "lib/"
   ],
   "scripts": {
     "test": "mocha --harmony -t 5000 test/*.js",
@@ -40,7 +41,7 @@
     "jshint": "*",
     "koa": "~0.17.0",
     "koa-middlewares": "~2.1.0",
-    "koa-router": "~4.0.1",
+    "koa-router": "~5.3.0",
     "mocha": "*",
     "pedding": "~1.0.0",
     "supertest": "~0.15.0"
