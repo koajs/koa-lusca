@@ -37,7 +37,7 @@ describe('CSP', function () {
 
     request(app.listen())
     .get('/')
-    .expect('Content-Security-Policy', 'default-src *; ')
+    .expect('Content-Security-Policy', 'default-src *')
     .expect('hello')
     .expect(200, done);
   });
@@ -45,7 +45,7 @@ describe('CSP', function () {
   it('string config', function (done) {
     var app = mock({
       csp: {
-        policy: 'default-src *a'
+        policy: 'default-src *'
       }
     });
 
@@ -72,7 +72,6 @@ describe('CSP', function () {
 
     request(app.listen())
     .get('/')
-    // .expect('Content-Security-Policy', 'block-all-mixed-content; upgrade-insecure-requests; ')
     .expect('Content-Security-Policy', 'default-src *; img-src *')
     .expect(200, done);
   });
