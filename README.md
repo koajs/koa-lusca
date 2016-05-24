@@ -66,7 +66,6 @@ If enabled, the CSRF token must be in the payload when modifying data or you wil
 
 ### lusca.csp(options)
 
-* `options.policy` Object - Object definition of policy.
 * `options.policy` String, Object, or an Array - Object definition of policy. Valid policies examples include:
     * `{"default-src": "*"}`
     * `"referrer no-referrer"`
