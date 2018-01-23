@@ -7,6 +7,16 @@ var lusca = require('../index');
 var mock = require('./mocks/app');
 
 describe('X-Content-Type-Options', function () {
+  var server;
+
+  afterEach(function (done) {
+    if (server) {
+      server.close(done);
+    } else {
+      done();
+    }
+  });
+
   it('method', function () {
     assert(typeof lusca.cto === 'function');
   });
@@ -28,7 +38,9 @@ describe('X-Content-Type-Options', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('X-Content-Type-Options', config.cto)
     .expect('hello')

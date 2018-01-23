@@ -6,6 +6,16 @@ var lusca = require('../index');
 var mock = require('./mocks/app');
 
 describe('xssProtection', function () {
+  var server;
+
+  afterEach(function (done) {
+    if (server) {
+      server.close(done);
+    } else {
+      done();
+    }
+  });
+
   it('method', function () {
     assert(typeof lusca.xssProtection === 'function');
   });
@@ -14,7 +24,9 @@ describe('xssProtection', function () {
     var config = { xssProtection: 1 };
     var app = mock(config);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('X-XSS-Protection', '1; mode=block')
     .expect(200, done);
@@ -24,7 +36,9 @@ describe('xssProtection', function () {
     var config = { xssProtection: true };
     var app = mock(config);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('X-XSS-Protection', '1; mode=block')
     .expect(200, done);
@@ -34,7 +48,9 @@ describe('xssProtection', function () {
     var config = { xssProtection: { enabled: 1, mode: 'foo' } };
     var app = mock(config);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('X-XSS-Protection', '1; mode=foo')
     .expect(200, done);
@@ -44,7 +60,9 @@ describe('xssProtection', function () {
     var config = { xssProtection: { enabled: true } };
     var app = mock(config);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('X-XSS-Protection', '1; mode=block')
     .expect(200, done);
@@ -54,7 +72,9 @@ describe('xssProtection', function () {
     var config = { xssProtection: { enabled: 0 } };
     var app = mock(config);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('X-XSS-Protection', '0; mode=block')
     .expect(200, done);

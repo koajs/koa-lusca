@@ -7,6 +7,15 @@ var lusca = require('..');
 var mock = require('./mocks/app');
 
 describe('P3P', function () {
+  var server;
+
+  afterEach(function (done) {
+    if (server) {
+      server.close(done);
+    } else {
+      done();
+    }
+  });
 
   it('method', function () {
     assert(typeof lusca.p3p === 'function');
@@ -32,7 +41,9 @@ describe('P3P', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('P3P', config.p3p)
     .expect('hello')

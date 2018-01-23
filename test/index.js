@@ -6,6 +6,15 @@ var lusca = require('../index');
 var mock = require('./mocks/app');
 
 describe('All', function () {
+  var server;
+
+  afterEach(function (done) {
+    if (server) {
+      server.close(done);
+    } else {
+      done();
+    }
+  });
 
   it('method', function () {
     assert(typeof lusca === 'function');
@@ -15,7 +24,9 @@ describe('All', function () {
     var config = require('./mocks/config/all'),
     app = mock(config);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('X-FRAME-OPTIONS', config.xframe)
     .expect('P3P', config.p3p)

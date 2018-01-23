@@ -7,6 +7,16 @@ var lusca = require('../index');
 var mock = require('./mocks/app');
 
 describe('CSP', function () {
+  var server;
+
+  afterEach(function (done) {
+    if (server) {
+      server.close(done);
+    } else {
+      done();
+    }
+  });
+
   it('method', function () {
     assert(typeof lusca.csp === 'function');
   });
@@ -19,7 +29,9 @@ describe('CSP', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.reportUri)
     .expect('hello')
@@ -35,7 +47,9 @@ describe('CSP', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Content-Security-Policy', 'default-src *')
     .expect('hello')
@@ -53,7 +67,9 @@ describe('CSP', function () {
       res.status(200).end();
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Content-Security-Policy', 'default-src *')
     .expect(200, done);
@@ -70,7 +86,9 @@ describe('CSP', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Content-Security-Policy', 'default-src *; img-src *')
     .expect(200, done);
@@ -89,7 +107,9 @@ describe('CSP', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Content-Security-Policy', 'default-src *; img-src *')
     .expect(200, done);

@@ -6,6 +6,16 @@ var lusca = require('../index');
 var mock = require('./mocks/app');
 
 describe('HSTS', function () {
+  var server;
+
+  afterEach(function (done) {
+    if (server) {
+      server.close(done);
+    } else {
+      done();
+    }
+  });
+
   it('method', function () {
     assert(typeof lusca.hsts === 'function');
   });
@@ -24,7 +34,9 @@ describe('HSTS', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge)
     .expect('hello')
@@ -39,7 +51,9 @@ describe('HSTS', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Strict-Transport-Security', 'max-age=0')
     .expect('hello')
@@ -54,7 +68,9 @@ describe('HSTS', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Strict-Transport-Security', 'max-age=31536000')
     .expect('hello')
@@ -69,7 +85,9 @@ describe('HSTS', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge + '; includeSubDomains')
     .expect('hello')
@@ -84,7 +102,9 @@ describe('HSTS', function () {
       this.body = 'hello';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge + '; includeSubDomains; preload')
     .expect('hello')
@@ -92,6 +112,7 @@ describe('HSTS', function () {
   });
 
   it('header (missing maxAge)', function () {
+    server = null;
     assert.throws(function () {
       mock({ hsts: {} });
     }, /options\.maxAge should be a number/);

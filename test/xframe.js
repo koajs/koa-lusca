@@ -8,6 +8,15 @@ var lusca = require('../index');
 var mock = require('./mocks/app');
 
 describe('XFRAME', function () {
+  var server;
+
+  afterEach(function (done) {
+    if (server) {
+      server.close(done);
+    } else {
+      done();
+    }
+  });
 
   it('method', function () {
     assert(typeof lusca.xframe === 'function');
@@ -23,7 +32,9 @@ describe('XFRAME', function () {
     var config = { xframe: 'DENY' };
     var app = mock(config);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('X-FRAME-OPTIONS', config.xframe)
     .expect(200, done);
@@ -33,7 +44,9 @@ describe('XFRAME', function () {
     var config = { xframe: 'SAMEORIGIN' };
     var app = mock(config);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect('X-FRAME-OPTIONS', config.xframe)
     .expect(200, done);
@@ -50,7 +63,9 @@ describe('XFRAME', function () {
       this.body = 'show';
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/show')
     .expect('X-FRAME-OPTIONS', config.xframe.value)
     .expect('show')
@@ -64,7 +79,9 @@ describe('XFRAME', function () {
     var config = { xframe: { value: 'SAMEORIGIN', enable: enable } };
     var app = mock(config);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect(200, function (err, res) {
       assert(!err);

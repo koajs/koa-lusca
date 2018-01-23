@@ -6,6 +6,16 @@ var lusca = require('../index');
 var mock = require('./mocks/app');
 
 describe('CSRF', function () {
+  var server;
+
+  afterEach(function (done) {
+    if (server) {
+      server.close(done);
+    } else {
+      done();
+    }
+  });
+
   it('method', function () {
     assert(typeof lusca.csrf === 'function');
   });
@@ -15,7 +25,9 @@ describe('CSRF', function () {
       csrf: true
     }, true);
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/')
     .expect(500, done);
   });
@@ -29,7 +41,9 @@ describe('CSRF', function () {
       };
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/csrf')
     .expect(200)
     .end(function (err, res) {
@@ -54,11 +68,13 @@ describe('CSRF', function () {
       };
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/csrf')
     .expect(200, function (err, res) {
       assert(!err);
-      request(app.listen())
+      request(server)
       .post('/csrf')
       .set('Cookie', res.headers['set-cookie'].join(';'))
       .send({
@@ -71,7 +87,9 @@ describe('CSRF', function () {
   it('POST (403 Forbidden on no token)', function (done) {
     var app = mock({ csrf: true });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .post('/')
     .expect(403, done);
   });
@@ -89,11 +107,13 @@ describe('CSRF', function () {
       };
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/csrf')
     .expect(200, function (err, res) {
       assert(!err);
-      request(app.listen())
+      request(server)
       .post('/csrf')
       .set('cookie', res.headers['set-cookie'].join(';'))
       .send({
@@ -111,11 +131,13 @@ describe('CSRF', function () {
       };
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/csrf')
     .expect(200, function (err, res) {
       assert(!err);
-      request(app.listen())
+      request(server)
       .post('/csrf')
       .set('cookie', res.headers['set-cookie'].join(';'))
       .set('x-csrf-token', res.body.token)
@@ -140,11 +162,13 @@ describe('CSRF', function () {
       };
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/csrf')
     .expect(200, function (err, res) {
       assert(!err);
-      request(app.listen())
+      request(server)
       .post('/csrf')
       .set('cookie', res.headers['set-cookie'].join(';'))
       .set('x-xsrf-token', res.body.token)
@@ -170,12 +194,14 @@ describe('CSRF', function () {
       };
     });
 
-    request(app.listen())
+    server = app.listen();
+
+    request(server)
     .get('/csrf')
     .expect(200, function (err, res) {
       assert(!err);
       assert(myToken.value === res.body.token);
-      request(app.listen())
+      request(server)
       .post('/csrf')
       .set('cookie', res.headers['set-cookie'].join(';'))
       .send({
