@@ -1,99 +1,120 @@
-'use strict';
+/* eslint-env mocha */
 
-var request = require('supertest');
-var assert = require('assert');
-var lusca = require('../index');
-var mock = require('./mocks/app');
+const request = require('supertest')
+const assert = require('assert')
+const lusca = require('../index')
+const mock = require('./mocks/app')
 
 describe('HSTS', function () {
+  var server
+
+  afterEach(function (done) {
+    if (server) {
+      server.close(done)
+    } else {
+      done()
+    }
+  })
+
   it('method', function () {
-    assert(typeof lusca.hsts === 'function');
-  });
+    assert(typeof lusca.hsts === 'function')
+  })
 
   it('assert error when maxAge is not number', function () {
     assert.throws(function () {
-      lusca.hsts();
-    }, /options\.maxAge should be a number/);
-  });
+      lusca.hsts()
+    }, /options\.maxAge should be a number/)
+  })
 
-  it('header (maxAge)', function (done) {
-    var config = { hsts: { maxAge: 31536000 } };
-    var app = mock(config);
+  it('header (maxAge)', function () {
+    var config = { hsts: { maxAge: 31536000 } }
+    var app = mock(config)
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
+    app.use(function (ctx) {
+      ctx.body = 'hello'
+    })
 
-    request(app.listen())
-    .get('/')
-    .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge)
-    .expect('hello')
-    .expect(200, done);
-  });
+    server = app.listen()
 
-  it('header (maxAge 0)', function (done) {
-    var config = { hsts: { maxAge: 0 } };
-    var app = mock(config);
+    return request(server)
+      .get('/')
+      .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge)
+      .expect('hello')
+      .expect(200)
+  })
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
+  it('header (maxAge 0)', function () {
+    var config = { hsts: { maxAge: 0 } }
+    var app = mock(config)
 
-    request(app.listen())
-    .get('/')
-    .expect('Strict-Transport-Security', 'max-age=0')
-    .expect('hello')
-    .expect(200, done);
-  });
+    app.use(function (ctx) {
+      ctx.body = 'hello'
+    })
 
-  it('hsts = number', function (done) {
-    var config = { hsts: 31536000 };
-    var app = mock(config);
+    server = app.listen()
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
+    return request(server)
+      .get('/')
+      .expect('Strict-Transport-Security', 'max-age=0')
+      .expect('hello')
+      .expect(200)
+  })
 
-    request(app.listen())
-    .get('/')
-    .expect('Strict-Transport-Security', 'max-age=31536000')
-    .expect('hello')
-    .expect(200, done);
-  });
+  it('hsts = number', function () {
+    var config = { hsts: 31536000 }
+    var app = mock(config)
 
-  it('header (maxAge; includeSubDomains)', function (done) {
-    var config = { hsts: { maxAge: 31536000, includeSubDomains: true } };
-    var app = mock(config);
+    app.use(function (ctx) {
+      ctx.body = 'hello'
+    })
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
+    server = app.listen()
 
-    request(app.listen())
-    .get('/')
-    .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge + '; includeSubDomains')
-    .expect('hello')
-    .expect(200, done);
-  });
+    return request(server)
+      .get('/')
+      .expect('Strict-Transport-Security', 'max-age=31536000')
+      .expect('hello')
+      .expect(200)
+  })
 
-  it('header (maxAge; includeSubDomains; preload)', function (done) {
-    var config = { hsts: { maxAge: 31536000, includeSubDomains: true, preload: true } };
-    var app = mock(config);
+  it('header (maxAge; includeSubDomains)', function () {
+    var config = { hsts: { maxAge: 31536000, includeSubDomains: true } }
+    var app = mock(config)
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
+    app.use(function (ctx) {
+      ctx.body = 'hello'
+    })
 
-    request(app.listen())
-    .get('/')
-    .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge + '; includeSubDomains; preload')
-    .expect('hello')
-    .expect(200, done);
-  });
+    server = app.listen()
+
+    return request(server)
+      .get('/')
+      .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge + '; includeSubDomains')
+      .expect('hello')
+      .expect(200)
+  })
+
+  it('header (maxAge; includeSubDomains; preload)', function () {
+    var config = { hsts: { maxAge: 31536000, includeSubDomains: true, preload: true } }
+    var app = mock(config)
+
+    app.use(function (ctx) {
+      ctx.body = 'hello'
+    })
+
+    server = app.listen()
+
+    return request(server)
+      .get('/')
+      .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge + '; includeSubDomains; preload')
+      .expect('hello')
+      .expect(200)
+  })
 
   it('header (missing maxAge)', function () {
+    server = null
     assert.throws(function () {
-      mock({ hsts: {} });
-    }, /options\.maxAge should be a number/);
-  });
-});
+      mock({ hsts: {} })
+    }, /options\.maxAge should be a number/)
+  })
+})

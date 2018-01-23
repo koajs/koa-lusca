@@ -1,187 +1,207 @@
-'use strict';
+/* eslint-env mocha */
 
-var request = require('supertest');
-var assert = require('assert');
-var lusca = require('../index');
-var mock = require('./mocks/app');
+const request = require('supertest')
+const assert = require('assert')
+const lusca = require('../index')
+const mock = require('./mocks/app')
 
 describe('CSRF', function () {
-  it('method', function () {
-    assert(typeof lusca.csrf === 'function');
-  });
+  var server
 
-  it('expects a thrown error if no session object', function (done) {
+  afterEach(function (done) {
+    if (server) {
+      server.close(done)
+    } else {
+      done()
+    }
+  })
+
+  it('method', function () {
+    assert(typeof lusca.csrf === 'function')
+  })
+
+  it('expects a thrown error if no session object', function () {
     var app = mock({
       csrf: true
-    }, true);
+    }, true)
 
-    request(app.listen())
-    .get('/')
-    .expect(500, done);
-  });
+    server = app.listen()
 
-  it('GETs have a CSRF token', function (done) {
-    var app = mock({ csrf: true });
+    return request(server)
+      .get('/')
+      .expect(500)
+  })
 
-    app.get('/csrf', function* () {
-      this.body = {
-        token: this.state._csrf
-      };
-    });
+  it('GETs have a CSRF token', function () {
+    var app = mock({ csrf: true })
 
-    request(app.listen())
-    .get('/csrf')
-    .expect(200)
-    .end(function (err, res) {
-      assert(!err);
-      assert(res.body.token);
-      done();
-    });
-  });
+    app.router.get('/csrf', function (ctx) {
+      ctx.body = {
+        token: ctx.state._csrf
+      }
+    })
 
-  it('POST (200 OK with token)', function (done) {
-    var app = mock({ csrf: true });
+    server = app.listen()
 
-    app.get('/csrf', function* () {
-      this.body = {
-        token: this.state._csrf
-      };
-    });
-
-    app.post('/csrf', function* () {
-      this.body = {
-        token: this.state._csrf
-      };
-    });
-
-    request(app.listen())
-    .get('/csrf')
-    .expect(200, function (err, res) {
-      assert(!err);
-      request(app.listen())
-      .post('/csrf')
-      .set('Cookie', res.headers['set-cookie'].join(';'))
-      .send({
-        _csrf: res.body.token
+    return request(server)
+      .get('/csrf')
+      .expect(200)
+      .then(function (response) {
+        assert(response.body.token)
       })
-      .expect(200, done);
-    });
-  });
+  })
 
-  it('POST (403 Forbidden on no token)', function (done) {
-    var app = mock({ csrf: true });
+  it('POST (200 OK with token)', async function () {
+    var app = mock({ csrf: true })
 
-    request(app.listen())
-    .post('/')
-    .expect(403, done);
-  });
+    app.router.get('/csrf', function (ctx) {
+      ctx.body = {
+        token: ctx.state._csrf
+      }
+    })
 
-  it('should allow custom keys (session type: {value})', function (done) {
+    app.router.post('/csrf', function (ctx) {
+      ctx.body = {
+        token: ctx.state._csrf
+      }
+    })
+
+    server = app.listen()
+
+    const response = await request(server)
+      .get('/csrf')
+      .expect(200)
+
+    return request(server)
+      .post('/csrf')
+      .set('Cookie', response.headers['set-cookie'].join(';'))
+      .send({
+        _csrf: response.body.token
+      })
+      .expect(200)
+  })
+
+  it('POST (403 Forbidden on no token)', function () {
+    var app = mock({ csrf: true })
+
+    server = app.listen()
+
+    return request(server)
+      .post('/')
+      .expect(403)
+  })
+
+  it('should allow custom keys (session type: {value})', async function () {
     var app = mock({
       csrf: {
         key: 'foobar'
       }
-    });
+    })
 
-    app.all('/csrf', function* () {
-      this.body = {
-        token: this.state.foobar
-      };
-    });
+    app.router.use(function (ctx) {
+      ctx.body = {
+        token: ctx.state.foobar
+      }
+    })
 
-    request(app.listen())
-    .get('/csrf')
-    .expect(200, function (err, res) {
-      assert(!err);
-      request(app.listen())
+    server = app.listen()
+
+    const response = await request(server)
+      .get('/csrf')
+      .expect(200)
+
+    return request(server)
       .post('/csrf')
-      .set('cookie', res.headers['set-cookie'].join(';'))
+      .set('cookie', response.headers['set-cookie'].join(';'))
       .send({
-        foobar: res.body.token
+        foobar: response.body.token
       })
-      .expect(200, done);
-    });
-  });
+      .expect(200)
+  })
 
-  it('token can be sent through header instead of post body (session type: {value})', function (done) {
-    var app = mock({ csrf: true });
-    app.all('/csrf', function* () {
-      this.body = {
-        token: this.state._csrf
-      };
-    });
+  it('token can be sent through header instead of post body (session type: {value})', async function () {
+    var app = mock({ csrf: true })
+    app.router.use(function (ctx) {
+      ctx.body = {
+        token: ctx.state._csrf
+      }
+    })
 
-    request(app.listen())
-    .get('/csrf')
-    .expect(200, function (err, res) {
-      assert(!err);
-      request(app.listen())
+    server = app.listen()
+
+    const response = await request(server)
+      .get('/csrf')
+      .expect(200)
+
+    return request(server)
       .post('/csrf')
-      .set('cookie', res.headers['set-cookie'].join(';'))
-      .set('x-csrf-token', res.body.token)
+      .set('cookie', response.headers['set-cookie'].join(';'))
+      .set('x-csrf-token', response.body.token)
       .send({
         name: 'Test'
       })
-      .expect(200, done);
-    });
-  });
+      .expect(200)
+  })
 
-  it('should allow custom headers (session type: {value})', function (done) {
+  it('should allow custom headers (session type: {value})', async function () {
     var app = mock({
       csrf: {
         header: 'x-xsrf-token',
         secret: 'csrfSecret'
       }
-    });
+    })
 
-    app.all('/csrf', function* () {
-      this.body = {
-        token: this.state._csrf
-      };
-    });
+    app.router.use(function (ctx) {
+      ctx.body = {
+        token: ctx.state._csrf
+      }
+    })
 
-    request(app.listen())
+    server = app.listen()
+
+    const response = await request(server)
     .get('/csrf')
-    .expect(200, function (err, res) {
-      assert(!err);
-      request(app.listen())
+    .expect(200)
+
+    return request(server)
       .post('/csrf')
-      .set('cookie', res.headers['set-cookie'].join(';'))
-      .set('x-xsrf-token', res.body.token)
+      .set('cookie', response.headers['set-cookie'].join(';'))
+      .set('x-xsrf-token', response.body.token)
       .send({
         name: 'Test'
       })
-      .expect(200, done);
-    });
-  });
+      .expect(200)
+  })
 
-  it('should allow custom functions (session type: {value})', function (done) {
-    var myToken = require('./mocks/token');
+  it('should allow custom functions (session type: {value})', async function () {
+    var myToken = require('./mocks/token')
     var mockConfig = {
       csrf: {
         impl: myToken
       }
-    };
-    var app = mock(mockConfig);
+    }
+    var app = mock(mockConfig)
 
-    app.all('/csrf', function* () {
-      this.body = {
-        token: this.state._csrf
-      };
-    });
+    app.router.use(function (ctx) {
+      ctx.body = {
+        token: ctx.state._csrf
+      }
+    })
 
-    request(app.listen())
-    .get('/csrf')
-    .expect(200, function (err, res) {
-      assert(!err);
-      assert(myToken.value === res.body.token);
-      request(app.listen())
+    server = app.listen()
+
+    const response = await request(server)
+      .get('/csrf')
+      .expect(200)
+
+    assert(myToken.value === response.body.token)
+
+    return request(server)
       .post('/csrf')
-      .set('cookie', res.headers['set-cookie'].join(';'))
+      .set('cookie', response.headers['set-cookie'].join(';'))
       .send({
-        _csrf: res.body.token
+        _csrf: response.body.token
       })
-      .expect(200, done);
-    });
-  });
-});
+      .expect(200)
+  })
+})
