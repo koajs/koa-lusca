@@ -1,4 +1,4 @@
-/**!
+/** !
  * koa-lusca - lib/csp.js
  *
  * Copyright(c) 2014 - 2015 fengmk2 and other contributors.
@@ -8,7 +8,7 @@
  *   fengmk2 <fengmk2@gmail.com> (http://fengmk2.github.com)
  */
 
-/*───────────────────────────────────────────────────────────────────────────*\
+/* ───────────────────────────────────────────────────────────────────────────*\
 │  Copyright (C) 2014 eBay Software Foundation                                │
 │                                                                             │
 │hh ,'""`.                                                                    │
@@ -24,35 +24,35 @@
 │   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  │
 │   See the License for the specific language governing permissions and       │
 │   limitations under the License.                                            │
-\*───────────────────────────────────────────────────────────────────────────*/
+\*─────────────────────────────────────────────────────────────────────────── */
 
-'use strict';
+'use strict'
 
 /**
  * Outputs all security headers based on configuration
  * @param {Object} options The configuration object.
  */
 var lusca = module.exports = function (options) {
-  var headers = [];
+  var headers = []
   if (options) {
     Object.keys(lusca).forEach(function (key) {
-      var config = options[key];
+      var config = options[key]
       if (config) {
-        headers.push(lusca[key](config));
+        headers.push(lusca[key](config))
       }
-    });
+    })
   }
 
-  var compose = require('koa-compose');
-  var mw = compose(headers);
-  mw._name = 'lusca';
-  return mw;
-};
+  var compose = require('koa-compose')
+  var mw = compose(headers)
+  mw._name = 'lusca'
+  return mw
+}
 
-lusca.csrf = require('./lib/csrf');
-lusca.csp = require('./lib/csp');
-lusca.hsts = require('./lib/hsts');
-lusca.p3p = require('./lib/p3p');
-lusca.xframe = require('./lib/xframes');
-lusca.xssProtection = require('./lib/xssprotection');
-lusca.cto = require('./lib/cto');
+lusca.csrf = require('./lib/csrf')
+lusca.csp = require('./lib/csp')
+lusca.hsts = require('./lib/hsts')
+lusca.p3p = require('./lib/p3p')
+lusca.xframe = require('./lib/xframes')
+lusca.xssProtection = require('./lib/xssprotection')
+lusca.cto = require('./lib/cto')

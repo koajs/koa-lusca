@@ -1,39 +1,42 @@
-'use strict';
+/* eslint-env mocha */
 
-var request = require('supertest');
-var assert = require('assert');
-var lusca = require('../index');
-var mock = require('./mocks/app');
+const request = require('supertest')
+const assert = require('assert')
+const lusca = require('../index')
+const mock = require('./mocks/app')
 
 describe('All', function () {
-  var server;
+  var server
 
   afterEach(function (done) {
     if (server) {
-      server.close(done);
+      server.close(done)
     } else {
-      done();
+      done()
     }
-  });
+  })
 
   it('method', function () {
-    assert(typeof lusca === 'function');
-  });
+    assert(typeof lusca === 'function')
+  })
 
-  it('headers', function (done) {
-    var config = require('./mocks/config/all'),
-    app = mock(config);
+  it('headers', function () {
+    var config = require('./mocks/config/all')
+    var app = mock(config)
 
-    server = app.listen();
+    app.use(function (ctx) {
+      ctx.status = 200
+    })
 
-    request(server)
-    .get('/')
-    .expect('X-FRAME-OPTIONS', config.xframe)
-    .expect('P3P', config.p3p)
-    .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge)
-    .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.csp.reportUri)
-    .expect('X-XSS-Protection', '1; mode=block')
-    .expect('hello')
-    .expect(200, done);
-  });
-});
+    server = app.listen()
+
+    return request(server)
+      .get('/')
+      .expect('X-FRAME-OPTIONS', config.xframe)
+      .expect('P3P', config.p3p)
+      .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge)
+      .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.csp.reportUri)
+      .expect('X-XSS-Protection', '1; mode=block')
+      .expect(200)
+  })
+})
