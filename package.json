@@ -1,13 +1,14 @@
 {
   "name": "koa-lusca",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Web application security middleware for koa.",
+  "license": "MIT",
   "main": "index.js",
   "files": [
     "index.js", "lib/"
   ],
   "scripts": {
-    "test": "mocha --harmony -t 5000 test/*.js",
+    "test": "mocha --harmony --exit test/*.js",
     "test-cov": "node --harmony node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -t 5000 test/*.js",
     "test-travis": "node --harmony node_modules/.bin/istanbul cover node_modules/.bin/_mocha --report lcovonly -- -t 5000 test/*.js",
     "jshint": "jshint lib/ test/ index.js",
@@ -26,23 +27,23 @@
   },
   "licenses": "MIT",
   "engines": {
-    "node": ">=0.11.x"
+    "node": ">=4.0.0"
   },
   "engineStrict": true,
   "dependencies": {
     "koa-compose": "~2.3.0"
   },
   "devDependencies": {
-    "autod": "*",
-    "contributors": "*",
-    "data-driven": "~1.1.0",
-    "istanbul-harmony": "*",
-    "jshint": "*",
-    "koa": "~0.17.0",
-    "koa-middlewares": "~2.1.0",
-    "koa-router": "~4.0.1",
-    "mocha": "*",
-    "pedding": "~1.0.0",
-    "supertest": "~0.15.0"
+    "autod": "^3.0.1",
+    "contributors": "^0.5.1",
+    "istanbul": "^0.4.5",
+    "jshint": "^2.9.5",
+    "koa": "^1.6.0",
+    "koa-bodyparser": "^2.3.0",
+    "koa-generic-session": "^1.11.6",
+    "koa-router": "^4.3.2",
+    "mocha": "^5.0.4",
+    "pedding": "^1.1.0",
+    "supertest": "^3.0.0"
   }
 }
