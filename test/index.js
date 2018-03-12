@@ -22,6 +22,8 @@ describe('All', function () {
     .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge)
     .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.csp.reportUri)
     .expect('X-XSS-Protection', '1; mode=block')
+    .expect('X-Content-Type-Options', 'nosniff')
+    .expect('Referrer-Policy', 'same-origin')
     .expect('hello')
     .expect(200, done);
   });
