@@ -1,6 +1,6 @@
 'use strict';
 
-var cspPolicy = require('./cspReport');
+const cspPolicy = require('./cspReport');
 
 module.exports = {
   csrf: true,

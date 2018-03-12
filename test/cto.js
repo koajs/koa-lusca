@@ -1,10 +1,10 @@
 /*global describe:false, it:false */
 'use strict';
 
-var request = require('supertest');
-var assert = require('assert');
-var lusca = require('../index');
-var mock = require('./mocks/app');
+const request = require('supertest');
+const assert = require('assert');
+const lusca = require('../index');
+const mock = require('./mocks/app');
 
 describe('X-Content-Type-Options', function () {
   it('method', function () {
@@ -21,8 +21,8 @@ describe('X-Content-Type-Options', function () {
   });
 
   it('header (nosniff)', function (done) {
-    var config = { cto: 'nosniff' };
-    var app = mock(config);
+    const config = { cto: 'nosniff' };
+    const app = mock(config);
 
     app.get('/', function* () {
       this.body = 'hello';

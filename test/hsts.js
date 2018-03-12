@@ -1,9 +1,9 @@
 'use strict';
 
-var request = require('supertest');
-var assert = require('assert');
-var lusca = require('../index');
-var mock = require('./mocks/app');
+const request = require('supertest');
+const assert = require('assert');
+const lusca = require('../index');
+const mock = require('./mocks/app');
 
 describe('HSTS', function () {
   it('method', function () {
@@ -17,8 +17,8 @@ describe('HSTS', function () {
   });
 
   it('header (maxAge)', function (done) {
-    var config = { hsts: { maxAge: 31536000 } };
-    var app = mock(config);
+    const config = { hsts: { maxAge: 31536000 } };
+    const app = mock(config);
 
     app.get('/', function* () {
       this.body = 'hello';
@@ -32,8 +32,8 @@ describe('HSTS', function () {
   });
 
   it('header (maxAge 0)', function (done) {
-    var config = { hsts: { maxAge: 0 } };
-    var app = mock(config);
+    const config = { hsts: { maxAge: 0 } };
+    const app = mock(config);
 
     app.get('/', function* () {
       this.body = 'hello';
@@ -47,8 +47,8 @@ describe('HSTS', function () {
   });
 
   it('hsts = number', function (done) {
-    var config = { hsts: 31536000 };
-    var app = mock(config);
+    const config = { hsts: 31536000 };
+    const app = mock(config);
 
     app.get('/', function* () {
       this.body = 'hello';
@@ -62,8 +62,8 @@ describe('HSTS', function () {
   });
 
   it('header (maxAge; includeSubDomains)', function (done) {
-    var config = { hsts: { maxAge: 31536000, includeSubDomains: true } };
-    var app = mock(config);
+    const config = { hsts: { maxAge: 31536000, includeSubDomains: true } };
+    const app = mock(config);
 
     app.get('/', function* () {
       this.body = 'hello';
@@ -77,8 +77,8 @@ describe('HSTS', function () {
   });
 
   it('header (maxAge; includeSubDomains; preload)', function (done) {
-    var config = { hsts: { maxAge: 31536000, includeSubDomains: true, preload: true } };
-    var app = mock(config);
+    const config = { hsts: { maxAge: 31536000, includeSubDomains: true, preload: true } };
+    const app = mock(config);
 
     app.get('/', function* () {
       this.body = 'hello';

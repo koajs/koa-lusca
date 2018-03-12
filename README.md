@@ -27,9 +27,9 @@ Fork from [lusca](https://github.com/krakenjs/lusca), [krakenjs/lusca#26](https:
 ## Usage
 
 ```js
-var koa = require('koa');
-var lusca = require('koa-lusca');
-var app = koa();
+const koa = require('koa');
+const lusca = require('koa-lusca');
+const app = koa();
 
 app.use(lusca({
   csrf: true,

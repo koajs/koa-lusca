@@ -1,13 +1,13 @@
 'use strict';
 
-var koa = require('koa');
-var session = require('koa-generic-session');
-var bodyParser = require('koa-bodyparser');
-var router = require('koa-router');
-var lusca = require('../..');
+const koa = require('koa');
+const session = require('koa-generic-session');
+const bodyParser = require('koa-bodyparser');
+const router = require('koa-router');
+const lusca = require('../..');
 
 module.exports = function (config, disableSession) {
-  var app = koa();
+  const app = koa();
   app.keys = ['key1', 'key2'];
   if (!disableSession) {
     app.use(session({ secret: 'abc' }));

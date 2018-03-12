@@ -1,13 +1,10 @@
 /*global describe:false, it:false */
 'use strict';
 
-
-var lusca = require('../index'),
-    request = require('supertest'),
-    assert = require('assert'),
-    mock = require('./mocks/app');
-
-
+const request = require('supertest');
+const assert = require('assert');
+const lusca = require('../index');
+const mock = require('./mocks/app');
 
 describe('referrerPolicy', function () {
 
@@ -16,7 +13,7 @@ describe('referrerPolicy', function () {
     });
 
     it('header (enabled)', function (done) {
-        var config = { referrerPolicy: 'no-referrer-when-downgrade' },
+        const config = { referrerPolicy: 'no-referrer-when-downgrade' },
             app = mock(config);
 
         app.get('/', function* () {
@@ -37,7 +34,7 @@ describe('referrerPolicy', function () {
 
     it('header invalid value in production doesn\'t throw error', function (done) {
         process.env.NODE_ENV = 'production';
-        var config = { referrerPolicy: 'invalid-value' },
+        const config = { referrerPolicy: 'invalid-value' },
             app = mock(config);
 
         app.get('/', function* () {

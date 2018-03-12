@@ -1,11 +1,11 @@
 /*global describe:false, it:false */
 'use strict';
 
-var request = require('supertest');
-var assert = require('assert');
-var pedding = require('pedding');
-var lusca = require('../index');
-var mock = require('./mocks/app');
+const request = require('supertest');
+const assert = require('assert');
+const pedding = require('pedding');
+const lusca = require('../index');
+const mock = require('./mocks/app');
 
 describe('XFRAME', function () {
 
@@ -20,8 +20,8 @@ describe('XFRAME', function () {
   });
 
   it('header (deny)', function (done) {
-    var config = { xframe: 'DENY' };
-    var app = mock(config);
+    const config = { xframe: 'DENY' };
+    const app = mock(config);
 
     request(app.listen())
     .get('/')
@@ -30,8 +30,8 @@ describe('XFRAME', function () {
   });
 
   it('header (sameorigin)', function (done) {
-    var config = { xframe: 'SAMEORIGIN' };
-    var app = mock(config);
+    const config = { xframe: 'SAMEORIGIN' };
+    const app = mock(config);
 
     request(app.listen())
     .get('/')
@@ -40,11 +40,11 @@ describe('XFRAME', function () {
   });
 
   it('header (sameorigin) with options.enable true', function (done) {
-    var enable = function (url) {
+    const enable = function (url) {
       return url.indexOf('/show') >= 0;
     };
-    var config = { xframe: { value: 'SAMEORIGIN', enable: enable } };
-    var app = mock(config);
+    const config = { xframe: { value: 'SAMEORIGIN', enable: enable } };
+    const app = mock(config);
 
     app.get('/show', function* () {
       this.body = 'show';
@@ -58,11 +58,11 @@ describe('XFRAME', function () {
   });
 
   it('header (sameorigin) with options.enable false', function (done) {
-    var enable = function (url) {
+    const enable = function (url) {
       return url.indexOf('/show') >= 0;
     };
-    var config = { xframe: { value: 'SAMEORIGIN', enable: enable } };
-    var app = mock(config);
+    const config = { xframe: { value: 'SAMEORIGIN', enable: enable } };
+    const app = mock(config);
 
     request(app.listen())
     .get('/')

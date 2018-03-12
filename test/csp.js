@@ -1,10 +1,10 @@
 /*global describe:false, it:false */
 'use strict';
 
-var request = require('supertest');
-var assert = require('assert');
-var lusca = require('../index');
-var mock = require('./mocks/app');
+const request = require('supertest');
+const assert = require('assert');
+const lusca = require('../index');
+const mock = require('./mocks/app');
 
 describe('CSP', function () {
   it('method', function () {
@@ -12,8 +12,8 @@ describe('CSP', function () {
   });
 
   it('header (report)', function (done) {
-    var config = require('./mocks/config/cspReport');
-    var app = mock({ csp: config });
+    const config = require('./mocks/config/cspReport');
+    const app = mock({ csp: config });
 
     app.get('/', function* () {
       this.body = 'hello';
@@ -28,8 +28,8 @@ describe('CSP', function () {
 
 
   it('header (enforce)', function (done) {
-    var config = require('./mocks/config/cspEnforce');
-    var app = mock({ csp: config });
+    const config = require('./mocks/config/cspEnforce');
+    const app = mock({ csp: config });
 
     app.get('/', function* () {
       this.body = 'hello';
@@ -43,7 +43,7 @@ describe('CSP', function () {
   });
 
   it('string config', function (done) {
-    var app = mock({
+    const app = mock({
       csp: {
         policy: 'default-src *'
       }
@@ -60,7 +60,7 @@ describe('CSP', function () {
   });
 
   it('array config', function (done) {
-    var app = mock({
+    const app = mock({
       csp: {
         policy: ['default-src *', 'img-src *']
       }
@@ -77,7 +77,7 @@ describe('CSP', function () {
   });
 
   it('nested config', function (done) {
-    var app = mock({
+    const app = mock({
       csp: {
         policy: [
         { 'default-src': '*' },
