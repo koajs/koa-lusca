@@ -1,4 +1,10 @@
 
+3.0.0 / 2018-03-12
+==================
+
+  * Koa v2.0
+  * Lower case headers for improved performance
+
 2.3.0 / 2018-03-11
 ==================
 

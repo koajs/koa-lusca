@@ -1,6 +1,6 @@
 {
   "name": "koa-lusca",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "description": "Web application security middleware for koa.",
   "license": "MIT",
   "main": "index.js",
