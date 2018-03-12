@@ -1,22 +1,44 @@
 'use strict';
 
-var koa = require('koa');
-var koaMiddlewares = require('koa-middlewares');
-var router = require('koa-router');
-var lusca = require('../..');
+const Koa = require('koa');
+const session = require('koa-generic-session');
+const bodyParser = require('koa-bodyparser');
+const Router = require('koa-router');
+const lusca = require('../..');
 
 module.exports = function (config, disableSession) {
-  var app = koa();
+  const app = new Koa();
+  const router = new Router();
   app.keys = ['key1', 'key2'];
   if (!disableSession) {
-    app.use(koaMiddlewares.session({ secret: 'abc' }));
+    app.use(session({ secret: 'abc' }));
   }
-  app.use(koaMiddlewares.bodyParser());
+  app.use(bodyParser());
   app.use(lusca(config));
-  app.use(router(app));
+  app.use(router.routes());
 
-  app.get('/', function* () {
-    this.body = 'hello';
+  router.get('/', function(ctx) {
+    ctx.body = 'hello';
+  });
+
+  router.get('/csrf', function(ctx) {
+    ctx.body = {
+      token: ctx.state._csrf
+    };
+  });
+  router.post('/csrf', function(ctx) {
+    ctx.body = {
+      token: ctx.state._csrf
+    };
+  });
+  router.all('/csrf-foobar', function(ctx) {
+    ctx.body = {
+      token: ctx.state.foobar
+    };
+  });
+
+  router.get('/show', function(ctx) {
+    ctx.body = 'show';
   });
 
   return app;
