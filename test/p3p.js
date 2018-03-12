@@ -28,10 +28,6 @@ describe('P3P', function () {
     const config = { p3p: 'MY_P3P_VALUE' };
     const app = mock(config);
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
-
     request(app.listen())
     .get('/')
     .expect('P3P', config.p3p)

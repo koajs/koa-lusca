@@ -3,7 +3,6 @@
 
 const request = require('supertest');
 const assert = require('assert');
-const pedding = require('pedding');
 const lusca = require('../index');
 const mock = require('./mocks/app');
 
@@ -45,10 +44,6 @@ describe('XFRAME', function () {
     };
     const config = { xframe: { value: 'SAMEORIGIN', enable: enable } };
     const app = mock(config);
-
-    app.get('/show', function* () {
-      this.body = 'show';
-    });
 
     request(app.listen())
     .get('/show')

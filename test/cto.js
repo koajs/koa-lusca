@@ -24,10 +24,6 @@ describe('X-Content-Type-Options', function () {
     const config = { cto: 'nosniff' };
     const app = mock(config);
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
-
     request(app.listen())
     .get('/')
     .expect('X-Content-Type-Options', config.cto)

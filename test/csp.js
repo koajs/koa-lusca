@@ -15,10 +15,6 @@ describe('CSP', function () {
     const config = require('./mocks/config/cspReport');
     const app = mock({ csp: config });
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
-
     request(app.listen())
     .get('/')
     .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.reportUri)
@@ -30,10 +26,6 @@ describe('CSP', function () {
   it('header (enforce)', function (done) {
     const config = require('./mocks/config/cspEnforce');
     const app = mock({ csp: config });
-
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
 
     request(app.listen())
     .get('/')
@@ -49,10 +41,6 @@ describe('CSP', function () {
       }
     });
 
-    app.get('/', function (req, res) {
-      res.status(200).end();
-    });
-
     request(app.listen())
     .get('/')
     .expect('Content-Security-Policy', 'default-src *')
@@ -64,10 +52,6 @@ describe('CSP', function () {
       csp: {
         policy: ['default-src *', 'img-src *']
       }
-    });
-
-    app.get('/', function* () {
-      this.body = 'hello';
     });
 
     request(app.listen())
@@ -84,9 +68,6 @@ describe('CSP', function () {
         'img-src *'
         ]
       }
-    });
-    app.get('/', function* () {
-      this.body = 'hello';
     });
 
     request(app.listen())

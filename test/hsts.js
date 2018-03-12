@@ -20,10 +20,6 @@ describe('HSTS', function () {
     const config = { hsts: { maxAge: 31536000 } };
     const app = mock(config);
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
-
     request(app.listen())
     .get('/')
     .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge)
@@ -34,10 +30,6 @@ describe('HSTS', function () {
   it('header (maxAge 0)', function (done) {
     const config = { hsts: { maxAge: 0 } };
     const app = mock(config);
-
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
 
     request(app.listen())
     .get('/')
@@ -50,10 +42,6 @@ describe('HSTS', function () {
     const config = { hsts: 31536000 };
     const app = mock(config);
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
-
     request(app.listen())
     .get('/')
     .expect('Strict-Transport-Security', 'max-age=31536000')
@@ -65,10 +53,6 @@ describe('HSTS', function () {
     const config = { hsts: { maxAge: 31536000, includeSubDomains: true } };
     const app = mock(config);
 
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
-
     request(app.listen())
     .get('/')
     .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge + '; includeSubDomains')
@@ -79,10 +63,6 @@ describe('HSTS', function () {
   it('header (maxAge; includeSubDomains; preload)', function (done) {
     const config = { hsts: { maxAge: 31536000, includeSubDomains: true, preload: true } };
     const app = mock(config);
-
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
 
     request(app.listen())
     .get('/')

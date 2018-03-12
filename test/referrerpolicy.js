@@ -6,6 +6,7 @@ const assert = require('assert');
 const lusca = require('../index');
 const mock = require('./mocks/app');
 
+
 describe('referrerPolicy', function () {
 
     it('method', function () {
@@ -15,10 +16,6 @@ describe('referrerPolicy', function () {
     it('header (enabled)', function (done) {
         const config = { referrerPolicy: 'no-referrer-when-downgrade' },
             app = mock(config);
-
-        app.get('/', function* () {
-            this.body = 'hello';
-        });
 
         request(app.listen())
             .get('/')
@@ -36,10 +33,6 @@ describe('referrerPolicy', function () {
         process.env.NODE_ENV = 'production';
         const config = { referrerPolicy: 'invalid-value' },
             app = mock(config);
-
-        app.get('/', function* () {
-            this.body = 'hello';
-        });
 
         request(app.listen())
             .get('/')
