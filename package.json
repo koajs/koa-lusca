@@ -1,16 +1,17 @@
 {
   "name": "koa-lusca",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Web application security middleware for koa.",
   "main": "index.js",
   "files": [
-    "index.js", "lib/"
+    "index.js",
+    "lib"
   ],
   "scripts": {
-    "test": "mocha --harmony -t 5000 test/*.js",
-    "test-cov": "node --harmony node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -t 5000 test/*.js",
-    "test-travis": "node --harmony node_modules/.bin/istanbul cover node_modules/.bin/_mocha --report lcovonly -- -t 5000 test/*.js",
-    "jshint": "jshint lib/ test/ index.js",
+    "test": "mocha -t 5000 test/*.js",
+    "test-cov": "node node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -t 5000 test/*.js",
+    "test-travis": "node node_modules/.bin/istanbul cover node_modules/.bin/_mocha --report lcovonly -- -t 5000 test/*.js",
+    "standard": "standard --fix lib/* test/* index.js",
     "autod": "autod -w --prefix '~'",
     "cnpm": "npm install --registry=https://registry.npmmirror.com",
     "contributors": "contributors -f plain -o AUTHORS"
@@ -26,23 +27,23 @@
   },
   "licenses": "MIT",
   "engines": {
-    "node": ">=0.11.x"
+    "node": ">=8"
   },
   "engineStrict": true,
   "dependencies": {
-    "koa-compose": "~2.3.0"
+    "koa-compose": "^4.0.0"
   },
   "devDependencies": {
     "autod": "*",
     "contributors": "*",
     "data-driven": "~1.1.0",
     "istanbul-harmony": "*",
-    "jshint": "*",
-    "koa": "~0.17.0",
-    "koa-middlewares": "~2.1.0",
-    "koa-router": "~4.0.1",
-    "mocha": "*",
-    "pedding": "~1.0.0",
-    "supertest": "~0.15.0"
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-generic-session": "^2.0.1",
+    "koa-trie-router": "^2.1.6",
+    "mocha": "^5.0.0",
+    "standard": "^10.0.3",
+    "supertest": "^3.0.0"
   }
 }

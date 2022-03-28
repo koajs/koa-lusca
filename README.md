@@ -24,12 +24,16 @@ Web application security middleware for koa.
 
 Fork from [lusca](https://github.com/krakenjs/lusca), [krakenjs/lusca#26](https://github.com/krakenjs/lusca/pull/26).
 
+## Compatibility
++ **Koa@1** is compatible with `2.x.x` versions of **koa-lusca**
++ **Koa@2** is compatible with `3.x.x` versions
+
 ## Usage
 
 ```js
-var koa = require('koa');
-var lusca = require('koa-lusca');
-var app = koa();
+const koa = require('koa');
+const lusca = require('koa-lusca');
+const app = new Koa();
 
 app.use(lusca({
   csrf: true,

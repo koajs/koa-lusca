@@ -1,23 +1,28 @@
-'use strict';
+'use strict'
 
-var koa = require('koa');
-var koaMiddlewares = require('koa-middlewares');
-var router = require('koa-router');
-var lusca = require('../..');
+var Koa = require('koa')
+var session = require('koa-generic-session')
+var Router = require('koa-trie-router')
+var bodyParser = require('koa-bodyparser')
+var lusca = require('../..')
 
 module.exports = function (config, disableSession) {
-  var app = koa();
-  app.keys = ['key1', 'key2'];
+  const app = new Koa()
+
+  app.keys = ['key1', 'key2']
+
   if (!disableSession) {
-    app.use(koaMiddlewares.session({ secret: 'abc' }));
+    app.use(session({}, app))
+    app.use(function (ctx, next) {
+      ctx.session.secret = 'abc'
+      return next()
+    })
   }
-  app.use(koaMiddlewares.bodyParser());
-  app.use(lusca(config));
-  app.use(router(app));
+  app.use(bodyParser())
+  app.use(lusca(config))
 
-  app.get('/', function* () {
-    this.body = 'hello';
-  });
+  app.router = new Router()
+  app.use(app.router.middleware())
 
-  return app;
-};
+  return app
+}
