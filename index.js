@@ -1,7 +1,7 @@
 /**!
  * koa-lusca - lib/csp.js
  *
- * Copyright(c) 2014 - 2015 fengmk2 and other contributors.
+ * Copyright(c) 2014 - 2018 fengmk2 and other contributors.
  * MIT Licensed
  *
  * Authors:
@@ -32,19 +32,19 @@
  * Outputs all security headers based on configuration
  * @param {Object} options The configuration object.
  */
-var lusca = module.exports = function (options) {
-  var headers = [];
+const lusca = module.exports = function (options) {
+  const headers = [];
   if (options) {
     Object.keys(lusca).forEach(function (key) {
-      var config = options[key];
+      const config = options[key];
       if (config) {
         headers.push(lusca[key](config));
       }
     });
   }
 
-  var compose = require('koa-compose');
-  var mw = compose(headers);
+  const compose = require('koa-compose');
+  const mw = compose(headers);
   mw._name = 'lusca';
   return mw;
 };
@@ -56,3 +56,4 @@ lusca.p3p = require('./lib/p3p');
 lusca.xframe = require('./lib/xframes');
 lusca.xssProtection = require('./lib/xssprotection');
 lusca.cto = require('./lib/cto');
+lusca.referrerPolicy = require('./lib/referrerpolicy');

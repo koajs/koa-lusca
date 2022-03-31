@@ -27,9 +27,9 @@ Fork from [lusca](https://github.com/krakenjs/lusca), [krakenjs/lusca#26](https:
 ## Usage
 
 ```js
-var koa = require('koa');
-var lusca = require('koa-lusca');
-var app = koa();
+const Koa = require('koa');
+const lusca = require('koa-lusca');
+const app = new Koa();
 
 app.use(lusca({
   csrf: true,
@@ -37,7 +37,8 @@ app.use(lusca({
   xframe: 'SAMEORIGIN',
   p3p: 'ABCDEF',
   hsts: { maxAge: 31536000, includeSubDomains: true },
-  xssProtection: true
+  xssProtection: true,
+  referrerPolicy: 'same-origin'
 }));
 ```
 
@@ -50,6 +51,7 @@ app.use(lusca.xframe({ value: 'SAMEORIGIN' }));
 app.use(lusca.p3p({ value: 'ABCDEF' }));
 app.use(lusca.hsts({ maxAge: 31536000 });
 app.use(lusca.xssProtection();
+app.use(lusca.referrerPolicy('same-origin'));
 ```
 
 ## API
@@ -115,6 +117,16 @@ Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_St
 * `options.mode` String - Optional. Mode to set on the header (see header docs). Defaults to `block`.
 
 Enables [X-XSS-Protection](http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx) headers to help prevent cross site scripting (XSS) attacks in older IE browsers (IE8)
+
+### lusca.cto()
+
+Enables [X-Content-Type-Options](https://blogs.msdn.microsoft.com/ie/2008/09/02/ie8-security-part-vi-beta-2-update/) header to prevent MIME-sniffing a response away from the declared content-type.
+
+### lusca.referrerPolicy(value)
+
+* `value` String - Optional. The value for the header, e.g. `origin`, `same-origin`, `no-referrer`. Defaults to `` (empty string).
+
+Enables [Referrer-Policy](https://www.w3.org/TR/referrer-policy/#intro) header to control the Referer header.
 
 ## License
 

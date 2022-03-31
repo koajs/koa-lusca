@@ -1,4 +1,15 @@
 
+3.0.0 / 2018-03-12
+==================
+
+  * Koa v2.0
+  * Lower case headers for improved performance
+
+2.3.0 / 2018-03-11
+==================
+
+  * Support Referrer-Policy (#18)
+
 2.2.0 / 2016-05-24
 ==================
 

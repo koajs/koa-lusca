@@ -1,10 +1,10 @@
 /*global describe:false, it:false */
 'use strict';
 
-var request = require('supertest');
-var assert = require('assert');
-var lusca = require('..');
-var mock = require('./mocks/app');
+const request = require('supertest');
+const assert = require('assert');
+const lusca = require('..');
+const mock = require('./mocks/app');
 
 describe('P3P', function () {
 
@@ -25,12 +25,8 @@ describe('P3P', function () {
   });
 
   it('header', function (done) {
-    var config = { p3p: 'MY_P3P_VALUE' };
-    var app = mock(config);
-
-    app.get('/', function* () {
-      this.body = 'hello';
-    });
+    const config = { p3p: 'MY_P3P_VALUE' };
+    const app = mock(config);
 
     request(app.listen())
     .get('/')

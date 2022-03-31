@@ -1,6 +1,6 @@
 'use strict';
 
-var tokenModule = module.exports = {
+const tokenModule = module.exports = {
   value: 'tokenAllTheThings',
 
   create: function (ctx) {

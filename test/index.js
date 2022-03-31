@@ -1,9 +1,9 @@
 'use strict';
 
-var request = require('supertest');
-var assert = require('assert');
-var lusca = require('../index');
-var mock = require('./mocks/app');
+const request = require('supertest');
+const assert = require('assert');
+const lusca = require('../index');
+const mock = require('./mocks/app');
 
 describe('All', function () {
 
@@ -12,7 +12,7 @@ describe('All', function () {
   });
 
   it('headers', function (done) {
-    var config = require('./mocks/config/all'),
+    const config = require('./mocks/config/all'),
     app = mock(config);
 
     request(app.listen())
@@ -22,6 +22,8 @@ describe('All', function () {
     .expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge)
     .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.csp.reportUri)
     .expect('X-XSS-Protection', '1; mode=block')
+    .expect('X-Content-Type-Options', 'nosniff')
+    .expect('Referrer-Policy', 'same-origin')
     .expect('hello')
     .expect(200, done);
   });
